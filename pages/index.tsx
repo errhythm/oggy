@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 
 export default function Home() {
@@ -10,6 +10,8 @@ export default function Home() {
   const [fontWeight, setFontWeight] = useState(700)
   const [imageUrl, setImageUrl] = useState('')
   const [logoUrl, setLogoUrl] = useState('')
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const generateImage = async () => {
     const params = new URLSearchParams({
@@ -25,6 +27,20 @@ export default function Home() {
     setImageUrl(url)
   }
 
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
+      generateImage()
+    }, 2000)
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [title, subtitle, backgroundColor, textColor, fontSize, fontWeight, logoUrl])
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
@@ -39,7 +55,7 @@ export default function Home() {
             <svg className="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span className="ml-2 text-xl font-bold text-gray-900">Oggy</span>
+            <span className="ml-2 text-xl font-bold text-gray-900">OGImage</span>
           </div>
           <nav>
             <ul className="flex space-x-4">
@@ -59,95 +75,89 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Image Settings</h2>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="Enter title"
-              />
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-semibold mb-4">Image Settings</h2>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  placeholder="Enter title"
+                />
+              </div>
+              <div>
+                <label htmlFor="subtitle" className="block text-sm font-medium text-gray-700">Subtitle</label>
+                <input
+                  type="text"
+                  id="subtitle"
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  placeholder="Enter subtitle"
+                />
+              </div>
+              <div>
+                <label htmlFor="backgroundColor" className="block text-sm font-medium text-gray-700">Background Color</label>
+                <input
+                  type="color"
+                  id="backgroundColor"
+                  value={backgroundColor}
+                  onChange={(e) => setBackgroundColor(e.target.value)}
+                  className="mt-1 block w-full h-10 border border-gray-300 rounded-md shadow-sm p-1"
+                />
+              </div>
+              <div>
+                <label htmlFor="textColor" className="block text-sm font-medium text-gray-700">Text Color</label>
+                <input
+                  type="color"
+                  id="textColor"
+                  value={textColor}
+                  onChange={(e) => setTextColor(e.target.value)}
+                  className="mt-1 block w-full h-10 border border-gray-300 rounded-md shadow-sm p-1"
+                />
+              </div>
+              <div>
+                <label htmlFor="fontSize" className="block text-sm font-medium text-gray-700">Font Size</label>
+                <input
+                  type="number"
+                  id="fontSize"
+                  value={fontSize}
+                  onChange={(e) => setFontSize(parseInt(e.target.value))}
+                  min="10"
+                  max="100"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                />
+              </div>
+              <div>
+                <label htmlFor="fontWeight" className="block text-sm font-medium text-gray-700">Font Weight</label>
+                <select
+                  id="fontWeight"
+                  value={fontWeight}
+                  onChange={(e) => setFontWeight(parseInt(e.target.value))}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                >
+                  <option value="400">Normal</option>
+                  <option value="700">Bold</option>
+                  <option value="900">Extra Bold</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-700">Logo URL</label>
+                <input
+                  type="text"
+                  id="logoUrl"
+                  value={logoUrl}
+                  onChange={(e) => setLogoUrl(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  placeholder="Enter logo URL"
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="subtitle" className="block text-sm font-medium text-gray-700">Subtitle</label>
-              <input
-                type="text"
-                id="subtitle"
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="Enter subtitle"
-              />
-            </div>
-            <div>
-              <label htmlFor="backgroundColor" className="block text-sm font-medium text-gray-700">Background Color</label>
-              <input
-                type="color"
-                id="backgroundColor"
-                value={backgroundColor}
-                onChange={(e) => setBackgroundColor(e.target.value)}
-                className="mt-1 block w-full h-10 border border-gray-300 rounded-md shadow-sm p-1"
-              />
-            </div>
-            <div>
-              <label htmlFor="textColor" className="block text-sm font-medium text-gray-700">Text Color</label>
-              <input
-                type="color"
-                id="textColor"
-                value={textColor}
-                onChange={(e) => setTextColor(e.target.value)}
-                className="mt-1 block w-full h-10 border border-gray-300 rounded-md shadow-sm p-1"
-              />
-            </div>
-            <div>
-              <label htmlFor="fontSize" className="block text-sm font-medium text-gray-700">Font Size</label>
-              <input
-                type="number"
-                id="fontSize"
-                value={fontSize}
-                onChange={(e) => setFontSize(parseInt(e.target.value))}
-                min="10"
-                max="100"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label htmlFor="fontWeight" className="block text-sm font-medium text-gray-700">Font Weight</label>
-              <select
-                id="fontWeight"
-                value={fontWeight}
-                onChange={(e) => setFontWeight(parseInt(e.target.value))}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              >
-                <option value="400">Normal</option>
-                <option value="700">Bold</option>
-                <option value="900">Extra Bold</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-700">Logo URL</label>
-              <input
-                type="text"
-                id="logoUrl"
-                value={logoUrl}
-                onChange={(e) => setLogoUrl(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="Enter logo URL"
-              />
-            </div>
-            <button
-              onClick={generateImage}
-              className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
-            >
-              Generate Image
-            </button>
           </div>
-        </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Preview</h2>
             {imageUrl ? (
