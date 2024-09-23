@@ -9,7 +9,10 @@ const imageSizes = {
   default: { width: 1200, height: 630 },
 }
 
-export default function handler(req: NextRequest) {
+// Simple in-memory cache
+const cache = new Map()
+
+export default async function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
 
@@ -24,7 +27,15 @@ export default function handler(req: NextRequest) {
 
     const { width, height } = imageSizes[imageSize as keyof typeof imageSizes]
 
-    return new ImageResponse(
+    // Create a unique cache key based on the request parameters
+    const cacheKey = `${title}-${subtitle}-${backgroundColor}-${textColor}-${fontSize}-${fontWeight}-${logoUrl}-${imageSize}`
+
+    // Check if the response is already in the cache
+    if (cache.has(cacheKey)) {
+      return cache.get(cacheKey)
+    }
+
+    const imageResponse = new ImageResponse(
       (
         <div
           style={{
@@ -79,6 +90,11 @@ export default function handler(req: NextRequest) {
         height,
       }
     )
+
+    // Store the response in the cache
+    cache.set(cacheKey, imageResponse)
+
+    return imageResponse
   } catch (e: any) {
     console.log(`${e.message}`)
     return new Response(`Failed to generate the image`, {
