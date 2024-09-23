@@ -34,7 +34,7 @@ export default function Home() {
     }
     timeoutRef.current = setTimeout(() => {
       generateImage()
-    }, 2000)
+    }, 1000)
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
