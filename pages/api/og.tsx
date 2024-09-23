@@ -6,11 +6,7 @@ export const config = {
 }
 
 const imageSizes = {
-  facebook: { width: 1200, height: 630 },
-  twitter: { width: 1200, height: 675 },
-  linkedin: { width: 1104, height: 736 },
-  pinterest: { width: 1000, height: 1500 },
-  discord: { width: 1024, height: 1024 },
+  default: { width: 1200, height: 630 },
 }
 
 export default function handler(req: NextRequest) {
@@ -24,7 +20,7 @@ export default function handler(req: NextRequest) {
     const fontSize = parseInt(searchParams.get('fontSize') || '60')
     const fontWeight = parseInt(searchParams.get('fontWeight') || '700')
     const logoUrl = searchParams.get('logoUrl') || ''
-    const imageSize = searchParams.get('imageSize') || 'facebook'
+    const imageSize = 'default'
 
     const { width, height } = imageSizes[imageSize as keyof typeof imageSizes]
 

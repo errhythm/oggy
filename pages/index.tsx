@@ -10,7 +10,6 @@ export default function Home() {
   const [fontWeight, setFontWeight] = useState(700)
   const [imageUrl, setImageUrl] = useState('')
   const [logoUrl, setLogoUrl] = useState('')
-  const [imageSize, setImageSize] = useState('facebook')
 
   const generateImage = async () => {
     const params = new URLSearchParams({
@@ -21,7 +20,6 @@ export default function Home() {
       fontSize: fontSize.toString(),
       fontWeight: fontWeight.toString(),
       logoUrl,
-      imageSize,
     })
     const url = `/api/og?${params.toString()}`
     setImageUrl(url)
@@ -141,21 +139,6 @@ export default function Home() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 placeholder="Enter logo URL"
               />
-            </div>
-            <div>
-              <label htmlFor="imageSize" className="block text-sm font-medium text-gray-700">Image Size</label>
-              <select
-                id="imageSize"
-                value={imageSize}
-                onChange={(e) => setImageSize(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              >
-                <option value="facebook">Facebook (1200x630)</option>
-                <option value="twitter">Twitter (1200x675)</option>
-                <option value="linkedin">LinkedIn (1104x736)</option>
-                <option value="pinterest">Pinterest (1000x1500)</option>
-                <option value="discord">Discord (1024x1024)</option>
-              </select>
             </div>
             <button
               onClick={generateImage}
