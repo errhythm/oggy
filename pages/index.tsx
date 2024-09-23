@@ -10,9 +10,9 @@ export default function Home() {
   const [fontWeight, setFontWeight] = useState(700)
   const [imageUrl, setImageUrl] = useState('')
   const [logoUrl, setLogoUrl] = useState('')
+  const [template, setTemplate] = useState('simple')
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
 
   const generateImage = async () => {
     const params = new URLSearchParams({
@@ -23,6 +23,7 @@ export default function Home() {
       fontSize: fontSize.toString(),
       fontWeight: fontWeight.toString(),
       logoUrl,
+      template,
     })
     const url = `/api/og?${params.toString()}`
     setImageUrl(url)
@@ -40,7 +41,7 @@ export default function Home() {
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [title, subtitle, backgroundColor, textColor, fontSize, fontWeight, logoUrl])
+  }, [title, subtitle, backgroundColor, textColor, fontSize, fontWeight, logoUrl, template])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -79,6 +80,17 @@ export default function Home() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Image Settings</h2>
             <div className="space-y-4">
+              <div>
+                <label htmlFor="template" className="block text-sm font-medium text-gray-700">Template</label>
+                <select
+                  id="template"
+                  value={template}
+                  onChange={(e) => setTemplate(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                >
+                  <option value="simple">Simple</option>
+                </select>
+              </div>
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
                 <input
