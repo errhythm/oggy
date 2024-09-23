@@ -13,6 +13,7 @@ export default function Home() {
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  
   const generateImage = async () => {
     const params = new URLSearchParams({
       title,
