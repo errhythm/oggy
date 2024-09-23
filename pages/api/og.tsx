@@ -13,6 +13,7 @@ export default function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
 
+
     const title = searchParams.get('title') || 'Default Title'
     const subtitle = searchParams.get('subtitle') || ''
     const backgroundColor = searchParams.get('backgroundColor') || '#ffffff'
