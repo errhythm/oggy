@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vercel/og": "latest",
+    "@vercel/speed-insights": "^1.0.12",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
