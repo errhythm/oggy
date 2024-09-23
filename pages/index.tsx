@@ -170,9 +170,9 @@ export default function Home() {
             )}
             {imageUrl && (
               <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">API Link:</h3>
+                <h3 className="text-lg font-semibold mb-2">API Link: {`${process.env.NEXT_PUBLIC_VERCEL_URL}, ${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}, ${process.env.VERCEL_PROJECT_PRODUCTION_URL}`}, ${process.env.NEXT_PRODUCTION_URL}</h3>
                 <code className="block bg-gray-100 p-2 rounded-md text-sm break-all">
-                  {`${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}${imageUrl}`}
+                  {`${process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000'}${imageUrl}`}
                 </code>
               </div>
             )}
