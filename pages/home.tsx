@@ -1,74 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Menu, X } from 'lucide-react';
-import ImageSettings from './components/ImageSettings';
-import Preview from './components/Preview';
+'use client'
 
-export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState('');
-  const [title, setTitle] = useState('');
-  const [subtitle, setSubtitle] = useState('');
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-  const [textColor, setTextColor] = useState('#000000');
-  const [fontSize, setFontSize] = useState(60);
-  const [fontWeight, setFontWeight] = useState(700);
-  const [imageUrl, setImageUrl] = useState('');
-  const [logoUrl, setLogoUrl] = useState('');
-  const [template, setTemplate] = useState('simple');
+import { useState } from 'react'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@/components/ui/card"
+import { CheckCircle, Menu, X } from 'lucide-react'
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+export function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [generatedImage, setGeneratedImage] = useState('')
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setGeneratedImage('/placeholder.svg');
-  };
-
-  const generateImage = async () => {
-    const params = new URLSearchParams({
-      title,
-      subtitle,
-      backgroundColor,
-      textColor,
-      fontSize: fontSize.toString(),
-      fontWeight: fontWeight.toString(),
-      logoUrl,
-      template,
-    });
-    const url = `/api/og?${params.toString()}`;
-    setImageUrl(url);
-  };
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      generateImage();
-    }, 1000);
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [title, subtitle, backgroundColor, textColor, fontSize, fontWeight, logoUrl, template]);
+    e.preventDefault()
+    setGeneratedImage('/placeholder.svg')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
-      <Head>
-        <title>Craft the Best Docs - Your SaaS Solution</title>
-        <meta name="description" content="Create stunning documents with our powerful tools." />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       {/* Navbar */}
       <motion.nav
         initial={{ y: -100 }}
@@ -96,71 +49,88 @@ export default function Home() {
             </div>
           </div>
         </div>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <a href="#" className="text-gray-900 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+              <a href="#" className="text-gray-900 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Features</a>
+              <a href="#" className="text-gray-900 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Pricing</a>
+              <a href="#" className="text-gray-900 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+          </motion.div>
+        )}
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-24 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold mb-6"
-          >
-            Craft the Best Docs in the World
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-xl mb-8"
-          >
-            Powerful tools to create beautiful documents in seconds.
-          </motion.p>
-          <div className="mt-10 sm:flex sm:justify-center lg:justify-start">
-            <div className="rounded-md shadow">
-              <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                Get started
-              </a>
-            </div>
-            <div className="mt-3 sm:mt-0 sm:ml-3">
-              <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                Learn more
-              </a>
-            </div>
+      <section className="pt-24 pb-12 md:pt-32 md:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:flex lg:items-center lg:justify-between">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="lg:w-1/2"
+            >
+              <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                Generate Amazing Images with AI
+              </h1>
+              <p className="mt-3 max-w-md mx-auto text-lg text-gray-600 sm:text-xl md:mt-5 md:max-w-3xl">
+                Transform your ideas into stunning visuals with our cutting-edge AI-powered image generation technology.
+              </p>
+              <div className="mt-10 sm:flex sm:justify-center lg:justify-start">
+                <div className="rounded-md shadow">
+                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                    Get started
+                  </a>
+                </div>
+                <div className="mt-3 sm:mt-0 sm:ml-3">
+                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                    Learn more
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-10 lg:mt-0 lg:w-1/2"
+            >
+              <Image
+                src="/placeholder.svg"
+                alt="Hero image"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-xl"
+              />
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Generate Image Form */}
       <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-8">Generate Your Image</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <ImageSettings
-              title={title}
-              setTitle={setTitle}
-              subtitle={subtitle}
-              setSubtitle={setSubtitle}
-              backgroundColor={backgroundColor}
-              setBackgroundColor={setBackgroundColor}
-              textColor={textColor}
-              setTextColor={setTextColor}
-              fontSize={fontSize}
-              setFontSize={setFontSize}
-              fontWeight={fontWeight}
-              setFontWeight={setFontWeight}
-              logoUrl={logoUrl}
-              setLogoUrl={setLogoUrl}
-              template={template}
-              setTemplate={setTemplate}
-            />
-            <Preview imageUrl={imageUrl} /></div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">Image Prompt</label>
+                <Textarea id="prompt" name="prompt" rows={3} className="mt-1 block w-full" placeholder="Describe the image you want to generate..." />
+              </div>
+              <div>
+                <Button type="submit" className="w-full">Generate Image</Button>
+              </div>
+            </form>
           </motion.div>
           {generatedImage && (
             <motion.div
@@ -252,17 +222,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-blue-600">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Revolutionize Your Image Creation?</h2>
-          <p className="text-xl mb-12">Join thousands of creators and start generating stunning visuals today.</p>
-          <a
-            href="#"
-            className="bg-white text-blue-600 font-medium px-8 py-3 rounded-full hover:bg-gray-100 transition-colors inline-block"
+      {/* CTA */}
+      <section className="py-12 bg-indigo-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
           >
-            Get Started for Free
-          </a>
+            <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
+              <span className="block">Ready to get started?</span>
+              <span className="block">Sign up now and create your first image for free!</span>
+            </h2>
+            <div className="mt-8 flex justify-center">
+              <div className="inline-flex rounded-md shadow">
+                <a href="#" className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50">
+                  Sign Up for Free
+                </a>
+              </div>
+              <div className="ml-3 inline-flex">
+                <a href="#" className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600">
+                  Learn more
+                </a>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -312,7 +297,7 @@ export default function Home() {
                 </svg>
               </a>
               <a href="#" className="text-gray-400 hover:text-gray-300">
-              <span className="sr-only">Instagram</span>
+                <span className="sr-only">Instagram</span>
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
                 </svg>
@@ -334,3 +319,4 @@ export default function Home() {
   )
 }
 
+export default Home;
