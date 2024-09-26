@@ -27,7 +27,7 @@ export default function Home() {
       if (logoUrl) params.append('logoUrl', logoUrl);
       if (template) params.append('template', template);
 
-      const url = `/api/og?${params.toString()}`;
+      const url = `/api/generate?${params.toString()}`;
       setImageUrl(url);
     };
 

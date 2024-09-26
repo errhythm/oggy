@@ -13,7 +13,7 @@ const templates = {
 export default async function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const template = searchParams.get('template') || 'emoji'
+    const template = searchParams.get('template') || 'simple'
 
     if (!templates[template]) {
       return new Response(`Template ${template} not found`, { status: 404 })
