@@ -1,10 +1,20 @@
 import { ImageResponse } from '@vercel/og'
+import { NextRequest } from 'next/server'
 
 export const config = {
   runtime: 'edge',
 }
 
-export default async function handler() {
+export default async function handler(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
+
+  // Get the query parameters
+  const title = searchParams.get('title') || 'Welcome'
+  const subtitle = searchParams.get('subtitle') || 'Oggy welcomes you.'
+  const backgroundColor = searchParams.get('backgroundColor') || 'white'
+  const textColor = searchParams.get('textColor') || '#000000'
+  const logoUrl = searchParams.get('logoUrl') || ''
+
   return new ImageResponse(
     (
       <div
@@ -15,33 +25,40 @@ export default async function handler() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'white',
+          backgroundColor,
         }}
       >
-        <div tw="bg-gray-50 flex">
-          <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-            <h2 tw="flex flex-col text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 text-left">
-              <span>Ready to dive in?</span>
-              <span tw="text-indigo-600">Start your free trial today.</span>
-            </h2>
-            <div tw="mt-8 flex md:mt-0">
-              <div tw="flex rounded-md shadow">
-                <a
-                  href="#"
-                  tw="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white"
-                >
-                  Get started
-                </a>
-              </div>
-              <div tw="ml-3 flex rounded-md shadow">
-                <a
-                  href="#"
-                  tw="flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-indigo-600"
-                >
-                  Learn more
-                </a>
-              </div>
-            </div>
+        <div tw="flex w-full h-full items-center justify-center">
+          <div tw="flex flex-col items-center justify-center max-w-4xl text-center px-8">
+            {logoUrl && (
+              <img
+                src={logoUrl}
+                alt="Logo"
+                tw="w-24 h-24 mb-8"
+                style={{ objectFit: 'contain' }}
+              />
+            )}
+            <h1
+              style={{
+                fontSize: '48px',
+                fontWeight: 'bold',
+                color: textColor,
+                lineHeight: '1.2',
+                marginBottom: '0.5em',
+              }}
+            >
+              {title}
+            </h1>
+            <p
+              style={{
+                fontSize: '24px',
+                fontWeight: 'normal',
+                color: textColor,
+                opacity: 0.8,
+              }}
+            >
+              {subtitle}
+            </p>
           </div>
         </div>
       </div>

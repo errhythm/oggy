@@ -2,7 +2,7 @@ import React from 'react';
 
 const Preview = ({ imageUrl }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-secondary p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Preview</h2>
       {imageUrl ? (
         <img src={imageUrl} alt="Generated OpenGraph Image" className="w-full rounded-md" />

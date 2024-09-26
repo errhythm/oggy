@@ -19,7 +19,7 @@ const ImageSettings = ({
   setTemplate,
 }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-secondary p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Image Settings</h2>
       <div className="space-y-4">
         <div>
