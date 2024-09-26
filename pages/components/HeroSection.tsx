@@ -11,7 +11,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl font-bold mb-6 text-foreground"
         >
-          Craft the Best Docs in the World
+          Create Stunning OG Images for Your Website
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -19,7 +19,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="text-xl mb-8 text-foreground"
         >
-          Powerful tools to create beautiful documents in seconds.
+          Powerful tools to create beautiful OG images in seconds.
         </motion.p>
         <div className="mt-10 flex flex-col sm:flex-row justify-center items-center">
           <div className="rounded-md shadow mb-3 sm:mb-0 sm:mr-3">

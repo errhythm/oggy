@@ -38,8 +38,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Head>
-        <title>Craft the Best Docs - Your SaaS Solution</title>
-        <meta name="description" content="Create stunning documents with our powerful tools." />
+        <title>Oggy Image - AI OG Image Generator</title>
+        <meta name="description" content="Create stunning OG images for your website with our AI OG Image Generator." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

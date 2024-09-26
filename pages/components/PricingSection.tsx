@@ -6,8 +6,8 @@ import { CheckCircle } from 'lucide-react';
 
 const PricingSection = () => {
   const pricingPlans = [
-    { name: 'Basic', price: '$9', features: ['100 images/month', 'Basic editing tools', 'Email support'] },
-    { name: 'Pro', price: '$29', features: ['500 images/month', 'Advanced editing tools', 'Priority support'] },
+    { name: 'Basic', price: '$9', features: ['100 images/month', 'Email support'] },
+    { name: 'Pro', price: '$29', features: ['500 images/month', 'Custom OG Image Templates', 'Priority support'] },
     { name: 'Enterprise', price: 'Custom', features: ['Unlimited images', 'Custom integrations', 'Dedicated account manager'] },
   ];
 
@@ -27,9 +27,10 @@ const PricingSection = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="h-full"
               >
-                <Card className="flex flex-col justify-between bg-secondary hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-2xl">
-                  <CardContent className="p-8">
+                <Card className="flex flex-col justify-between bg-secondary hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-2xl h-full">
+                  <CardContent className="p-8 flex-grow">
                     <motion.h3
                       className="text-2xl font-bold text-foreground mb-4"
                       initial={{ opacity: 0 }}
