@@ -42,6 +42,15 @@ interface TemplateField {
         { name: 'imageUrl', type: 'text', label: 'Image URL' },
       ],
     },
+    wonder: {
+      name: 'Wonder',
+      fields: [
+        { name: 'title', type: 'text', label: 'Title' },
+        { name: 'subtitle', type: 'text', label: 'Subtitle' },
+        { name: 'backgroundImage', type: 'text', label: 'Background Image URL' },
+        { name: 'authorName', type: 'text', label: 'Author Name' },
+      ],
+    },
   };
 
   export default templates;

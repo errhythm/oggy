@@ -1,6 +1,7 @@
 import { ImageResponse } from '@vercel/og'
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode } from 'react'
 
-export default function blogTemplate(data) {
+export default function blogTemplate(data: { backgroundColor: any; logoUrl: string; title: any; subtitle: any; brandName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode>; brandLogo: string }) {
   return new ImageResponse(
     (
       <div

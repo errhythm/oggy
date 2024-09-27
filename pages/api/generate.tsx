@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { ImageResponse } from '@vercel/og'
 import simpleTemplate from './templates/simple'
 import gradientTemplate from './templates/gradient'
+import wonderTemplate from './templates/wonder'
 import templates from '../../config/templates'
 import blogTemplate from './templates/blog'
 
@@ -13,6 +14,7 @@ const templateHandlers = {
   simple: simpleTemplate,
   gradient: gradientTemplate,
   blog: blogTemplate,
+  wonder: wonderTemplate,
 }
 
 export default async function handler(req: NextRequest) {
