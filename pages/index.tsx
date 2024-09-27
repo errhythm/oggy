@@ -10,30 +10,27 @@ import Footer from './components/Footer';
 
 export default function Home() {
   const [imageUrl, setImageUrl] = React.useState('');
-  const [title, setTitle] = React.useState('');
-  const [subtitle, setSubtitle] = React.useState('');
-  const [backgroundColor, setBackgroundColor] = React.useState('#ffffff');
-  const [textColor, setTextColor] = React.useState('#000000');
-  const [logoUrl, setLogoUrl] = React.useState('');
-  const [template, setTemplate] = React.useState('simple');
+  const [fields, setFields] = React.useState({
+    title: '',
+    subtitle: '',
+    backgroundColor: '#ffffff',
+    textColor: '#000000',
+    logoUrl: '',
+    template: 'simple',
+    gradientStart: '#ff0000',
+    gradientEnd: '#0000ff',
+  });
 
   React.useEffect(() => {
     const generateImage = async () => {
-      const params = new URLSearchParams();
-      if (title) params.append('title', title);
-      if (subtitle) params.append('subtitle', subtitle);
-      if (backgroundColor) params.append('backgroundColor', backgroundColor);
-      if (textColor) params.append('textColor', textColor);
-      if (logoUrl) params.append('logoUrl', logoUrl);
-      if (template) params.append('template', template);
-
+      const params = new URLSearchParams(fields);
       const url = `/api/generate?${params.toString()}`;
       setImageUrl(url);
     };
 
     const timeoutId = setTimeout(generateImage, 1000);
     return () => clearTimeout(timeoutId);
-  }, [title, subtitle, backgroundColor, textColor, logoUrl, template]);
+  }, [fields]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,18 +47,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-foreground text-center mb-8">Generate Your Image</h2>
           <ImageGenerator
-            title={title}
-            setTitle={setTitle}
-            subtitle={subtitle}
-            setSubtitle={setSubtitle}
-            backgroundColor={backgroundColor}
-            setBackgroundColor={setBackgroundColor}
-            textColor={textColor}
-            setTextColor={setTextColor}
-            logoUrl={logoUrl}
-            setLogoUrl={setLogoUrl}
-            template={template}
-            setTemplate={setTemplate}
+            fields={fields}
+            setFields={setFields}
             imageUrl={imageUrl}
           />
         </div>

@@ -1,29 +1,40 @@
 import { NextRequest } from 'next/server'
 import { ImageResponse } from '@vercel/og'
 import simpleTemplate from './templates/simple'
+import gradientTemplate from './templates/gradient'
+import templates from '../../config/templates'
+import blogTemplate from './templates/blog'
 
 export const config = {
   runtime: 'edge',
 }
 
-const templates = {
+const templateHandlers = {
   simple: simpleTemplate,
+  gradient: gradientTemplate,
+  blog: blogTemplate,
 }
 
 export default async function handler(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
-    const template = searchParams.get('template') || 'simple'
+    const { searchParams } = new URL(req.url);
+    const template = searchParams.get('template') || 'simple';
 
-    if (!templates[template]) {
-      return new Response(`Template ${template} not found`, { status: 404 })
+    if (!templateHandlers[template]) {
+      return new Response(`Template ${template} not found`, { status: 404 });
     }
 
-    return templates[template](req)
+    const templateConfig = templates[template];
+    const templateData = templateConfig.fields.reduce((acc, field) => {
+      acc[field.name] = searchParams.get(field.name) || field.default || '';
+      return acc;
+    }, {});
+
+    return templateHandlers[template](templateData);
   } catch (e: any) {
-    console.log(`${e.message}`)
+    console.log(`${e.message}`);
     return new Response(`Failed to generate the image`, {
       status: 500,
-    })
+    });
   }
 }

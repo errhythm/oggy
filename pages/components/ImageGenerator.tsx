@@ -1,33 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { HexColorPicker } from 'react-colorful';
+import templates from '../../config/templates';
 
-const ImageGenerator = ({
-  title,
-  setTitle,
-  subtitle,
-  setSubtitle,
-  backgroundColor,
-  setBackgroundColor,
-  textColor,
-  setTextColor,
-  logoUrl,
-  setLogoUrl,
-  template,
-  setTemplate,
-  imageUrl,
-}) => {
-  const [showBackgroundColorPicker, setShowBackgroundColorPicker] = useState(false);
-  const [showTextColorPicker, setShowTextColorPicker] = useState(false);
-  const backgroundColorPickerRef = useRef(null);
-  const textColorPickerRef = useRef(null);
+const ImageGenerator = ({ fields, setFields, imageUrl }) => {
+  const [activeColorPicker, setActiveColorPicker] = useState(null);
+  const colorPickerRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (backgroundColorPickerRef.current && !backgroundColorPickerRef.current.contains(event.target)) {
-        setShowBackgroundColorPicker(false);
-      }
-      if (textColorPickerRef.current && !textColorPickerRef.current.contains(event.target)) {
-        setShowTextColorPicker(false);
+      if (colorPickerRef.current && !colorPickerRef.current.contains(event.target)) {
+        setActiveColorPicker(null);
       }
     };
 
@@ -47,12 +29,12 @@ const ImageGenerator = ({
   };
 
   const resetForm = () => {
-    setTitle('');
-    setSubtitle('');
-    setBackgroundColor('#ffffff');
-    setTextColor('#000000');
-    setLogoUrl('');
-    setTemplate('simple');
+    const defaultFields = Object.values(templates)[0].fields.reduce((acc, field) => {
+      acc[field.name] = field.default || '';
+      return acc;
+    }, {});
+    setFields(defaultFields);
+    setFields(prevFields => ({ ...prevFields, template: Object.keys(templates)[0] }));
   };
 
   const downloadImage = async () => {
@@ -67,6 +49,14 @@ const ImageGenerator = ({
       link.click();
       document.body.removeChild(link);
     }
+  };
+
+  const handleFieldChange = (name, value) => {
+    setFields(prevFields => ({ ...prevFields, [name]: value }));
+  };
+
+  const toggleColorPicker = (fieldName) => {
+    setActiveColorPicker(activeColorPicker === fieldName ? null : fieldName);
   };
 
   return (
@@ -91,82 +81,54 @@ const ImageGenerator = ({
               <label htmlFor="template" className="block text-sm font-medium text-foreground mb-2">Template</label>
               <select
                 id="template"
-                value={template}
-                onChange={(e) => setTemplate(e.target.value)}
+                value={fields.template}
+                onChange={(e) => handleFieldChange('template', e.target.value)}
                 className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
               >
-                <option value="simple">Simple</option>
+                {Object.entries(templates).map(([key, value]) => (
+                  <option key={key} value={key}>{value.name}</option>
+                ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-foreground mb-2">Title</label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
-                placeholder="Enter title"
-              />
-            </div>
-            <div>
-              <label htmlFor="subtitle" className="block text-sm font-medium text-foreground mb-2">Subtitle</label>
-              <input
-                type="text"
-                id="subtitle"
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
-                placeholder="Enter subtitle"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="w-full sm:w-1/2">
-                <label htmlFor="backgroundColor" className="block text-sm font-medium text-foreground mb-2">Background Color</label>
-                <div className="relative" ref={backgroundColorPickerRef}>
-                  <button
-                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 flex items-center"
-                  >
-                    <div className="w-6 h-6 rounded-full mr-2" style={{ backgroundColor }}></div>
-                    {backgroundColor}
-                  </button>
-                  {showBackgroundColorPicker && (
-                    <div className="absolute z-10 mt-2">
-                      <HexColorPicker color={backgroundColor} onChange={setBackgroundColor} />
-                    </div>
-                  )}
-                </div>
+            {templates[fields.template].fields.map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="block text-sm font-medium text-foreground mb-2">{field.label}</label>
+                {field.type === 'color' ? (
+                  <div className="relative" ref={colorPickerRef}>
+                    <button
+                      onClick={() => toggleColorPicker(field.name)}
+                      className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 flex items-center"
+                    >
+                      <div
+                        className="w-6 h-6 rounded-full mr-2 border border-gray-300"
+                        style={{
+                          backgroundColor: fields[field.name] || field.default,
+                          boxShadow: `0 0 0 1px ${fields[field.name] || field.default}`
+                        }}
+                      ></div>
+                      {fields[field.name] || field.default}
+                    </button>
+                    {activeColorPicker === field.name && (
+                      <div className="absolute z-10 mt-2">
+                        <HexColorPicker
+                          color={fields[field.name] || field.default}
+                          onChange={(color) => handleFieldChange(field.name, color)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    type={field.type}
+                    id={field.name}
+                    value={fields[field.name]}
+                    onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
+                    placeholder={`Enter ${field.label.toLowerCase()}`}
+                  />
+                )}
               </div>
-              <div className="w-full sm:w-1/2">
-                <label htmlFor="textColor" className="block text-sm font-medium text-foreground mb-2">Text Color</label>
-                <div className="relative" ref={textColorPickerRef}>
-                  <button
-                    onClick={() => setShowTextColorPicker(!showTextColorPicker)}
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 flex items-center"
-                  >
-                    <div className="w-6 h-6 rounded-full mr-2" style={{ backgroundColor: textColor }}></div>
-                    {textColor}
-                  </button>
-                  {showTextColorPicker && (
-                    <div className="absolute z-10 mt-2">
-                      <HexColorPicker color={textColor} onChange={setTextColor} />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div>
-              <label htmlFor="logoUrl" className="block text-sm font-medium text-foreground mb-2">Logo URL</label>
-              <input
-                type="text"
-                id="logoUrl"
-                value={logoUrl}
-                onChange={(e) => setLogoUrl(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
-                placeholder="Enter logo URL"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </div>

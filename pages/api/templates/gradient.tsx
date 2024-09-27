@@ -1,11 +1,6 @@
 import { ImageResponse } from '@vercel/og'
-import { NextRequest } from 'next/server'
 
-export const config = {
-  runtime: 'edge',
-}
-
-export default function simpleTemplate(data) {
+export default function gradientTemplate(data) {
   return new ImageResponse(
     (
       <div
@@ -16,24 +11,16 @@ export default function simpleTemplate(data) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: data.backgroundColor || 'white',
+          background: `linear-gradient(45deg, ${data.gradientStart}, ${data.gradientEnd})`,
         }}
       >
         <div tw="flex w-full h-full items-center justify-center">
           <div tw="flex flex-col items-center justify-center max-w-4xl text-center px-8">
-            {data.logoUrl && (
-              <img
-                src={data.logoUrl}
-                alt="Logo"
-                tw="w-24 h-24 mb-8"
-                style={{ objectFit: 'contain' }}
-              />
-            )}
             <h1
               style={{
                 fontSize: '48px',
                 fontWeight: 'bold',
-                color: data.textColor || '#000000',
+                color: data.textColor,
                 lineHeight: '1.2',
                 marginBottom: '0.5em',
               }}
@@ -44,7 +31,7 @@ export default function simpleTemplate(data) {
               style={{
                 fontSize: '24px',
                 fontWeight: 'normal',
-                color: data.textColor || '#000000',
+                color: data.textColor,
                 opacity: 0.8,
               }}
             >
