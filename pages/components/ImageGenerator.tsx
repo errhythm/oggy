@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import templates from '../../config/templates';
 
-const ImageGenerator = ({ fields, setFields, imageUrl }) => {
+const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
   const [activeColorPicker, setActiveColorPicker] = useState(null);
   const colorPickerRef = useRef(null);
 
@@ -28,13 +28,14 @@ const ImageGenerator = ({ fields, setFields, imageUrl }) => {
     });
   };
 
+  const defaultTemplate = Object.keys(templates)[0] || '';
+  const defaultFields = templates[defaultTemplate]?.fields.reduce((acc, field) => {
+    acc[field.name] = field.default || '';
+    return acc;
+  }, {}) || {};
+
   const resetForm = () => {
-    const defaultFields = Object.values(templates)[0].fields.reduce((acc, field) => {
-      acc[field.name] = field.default || '';
-      return acc;
-    }, {});
-    setFields(defaultFields);
-    setFields(prevFields => ({ ...prevFields, template: Object.keys(templates)[0] }));
+    setFields({ ...defaultFields, template: defaultTemplate });
   };
 
   const downloadImage = async () => {
@@ -77,20 +78,22 @@ const ImageGenerator = ({ fields, setFields, imageUrl }) => {
             </button>
           </div>
           <div className="space-y-6">
-            <div>
-              <label htmlFor="template" className="block text-sm font-medium text-foreground mb-2">Template</label>
-              <select
-                id="template"
-                value={fields.template}
-                onChange={(e) => handleFieldChange('template', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
-              >
-                {Object.entries(templates).map(([key, value]) => (
-                  <option key={key} value={key}>{value.name}</option>
-                ))}
-              </select>
-            </div>
-            {templates[fields.template].fields.map((field) => (
+            {Object.keys(templates).length > 0 && (
+              <div>
+                <label htmlFor="template" className="block text-sm font-medium text-foreground mb-2">Template</label>
+                <select
+                  id="template"
+                  value={defaultTemplate}
+                  onChange={(e) => handleFieldChange('template', e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
+                >
+                  {Object.entries(templates).map(([key, value]) => (
+                    <option key={key} value={key}>{value.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {templates[defaultTemplate]?.fields.map((field) => (
               <div key={field.name}>
                 <label htmlFor={field.name} className="block text-sm font-medium text-foreground mb-2">{field.label}</label>
                 {field.type === 'color' ? (
@@ -102,7 +105,7 @@ const ImageGenerator = ({ fields, setFields, imageUrl }) => {
                       <div
                         className="w-6 h-6 rounded-full mr-2 border border-gray-300"
                         style={{
-                          backgroundColor: fields[field.name] || field.default,
+                          backgroundColor: (fields[field.name] || field.default) as string,
                           boxShadow: `0 0 0 1px ${fields[field.name] || field.default}`
                         }}
                       ></div>
