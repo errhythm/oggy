@@ -52,8 +52,17 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
     }
   };
 
-  const handleFieldChange = (name, value) => {
-    setFields(prevFields => ({ ...prevFields, [name]: value }));
+  const handleFieldChange = (name: string, value: string) => {
+    if (name === 'template') {
+      const newTemplate = templates[value];
+      const newFields = newTemplate.fields.reduce((acc, field) => {
+        acc[field.name] = field.default || '';
+        return acc;
+      }, {});
+      setFields({ ...newFields, template: value });
+    } else {
+      setFields(prevFields => ({ ...prevFields, [name]: value }));
+    }
   };
 
   const toggleColorPicker = (fieldName) => {
@@ -83,7 +92,7 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
                 <label htmlFor="template" className="block text-sm font-medium text-foreground mb-2">Template</label>
                 <select
                   id="template"
-                  value={defaultTemplate}
+                  value={(fields as { template?: string }).template || defaultTemplate}
                   onChange={(e) => handleFieldChange('template', e.target.value)}
                   className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
                 >
@@ -93,7 +102,7 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
                 </select>
               </div>
             )}
-            {templates[defaultTemplate]?.fields.map((field) => (
+            {templates[(fields as { template?: string }).template || defaultTemplate]?.fields.map((field) => (
               <div key={field.name}>
                 <label htmlFor={field.name} className="block text-sm font-medium text-foreground mb-2">{field.label}</label>
                 {field.type === 'color' ? (
