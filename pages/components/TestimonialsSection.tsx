@@ -31,7 +31,7 @@ const TestimonialsSection = () => {
                   <CardContent className="p-6">
                     <div className="flex flex-col h-full">
                       <div className="flex-grow">
-                        <p className="text-lg text-foreground mb-6 leading-relaxed">"{testimonial.quote}"</p>
+                        <p className="text-lg text-foreground mb-6 leading-relaxed">&ldquo;{testimonial.quote}&rdquo;</p>
                       </div>
                       <div className="mt-4 flex items-center">
                         <div className="flex-shrink-0 mr-3">

@@ -1,11 +1,13 @@
 import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
+import Image from 'next/image';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export const config = {
   runtime: 'edge',
 }
 
-export default function simpleTemplate(data) {
+export default function simpleTemplate(data: { backgroundColor: any; logoUrl: string | StaticImport; textColor: any; title: any; subtitle: any; }) {
   return new ImageResponse(
     (
       <div
@@ -22,10 +24,12 @@ export default function simpleTemplate(data) {
         <div tw="flex w-full h-full items-center justify-center">
           <div tw="flex flex-col items-center justify-center max-w-4xl text-center px-8">
             {data.logoUrl && (
-              <img
+              <Image
                 src={data.logoUrl}
                 alt="Logo"
-                tw="w-24 h-24 mb-8"
+                width={96}
+                height={96}
+                tw="mb-8"
                 style={{ objectFit: 'contain' }}
               />
             )}

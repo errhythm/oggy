@@ -9,6 +9,7 @@ interface TemplateField {
   interface TemplateConfig {
     name: string;
     fields: TemplateField[];
+    plan: 'Free' | 'Basic' | 'Pro' | 'Secret';
   }
 
   const templates: Record<string, TemplateConfig> = {
@@ -21,6 +22,7 @@ interface TemplateField {
         { name: 'textColor', type: 'color', label: 'Text Color', default: '#000000' },
         { name: 'logoUrl', type: 'text', label: 'Logo URL' },
       ],
+      plan: 'Free',
     },
     gradient: {
       name: 'Gradient',
@@ -31,6 +33,7 @@ interface TemplateField {
         { name: 'gradientEnd', type: 'color', label: 'Gradient End', default: '#0000ff' },
         { name: 'textColor', type: 'color', label: 'Text Color', default: '#ffffff' },
       ],
+      plan: 'Free',
     },
     blog: {
       name: 'Blog',
@@ -41,6 +44,7 @@ interface TemplateField {
         { name: 'subtitle', type: 'text', label: 'Subtitle' },
         { name: 'imageUrl', type: 'text', label: 'Image URL' },
       ],
+      plan: 'Free',
     },
     wonder: {
       name: 'Wonder',
@@ -50,6 +54,7 @@ interface TemplateField {
         { name: 'backgroundImage', type: 'text', label: 'Background Image URL' },
         { name: 'authorName', type: 'text', label: 'Author Name' },
       ],
+      plan: 'Free',
     },
   };
 

@@ -1,4 +1,5 @@
 import { ImageResponse } from '@vercel/og'
+import Image from 'next/image';
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode } from 'react'
 
 export default function blogTemplate(data: { backgroundColor: any; logoUrl: string; title: any; subtitle: any; brandName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode>; brandLogo: string }) {
@@ -25,7 +26,7 @@ export default function blogTemplate(data: { backgroundColor: any; logoUrl: stri
           padding: '40px',
         }}>
           {data.logoUrl && (
-            <img
+            <Image
               src={data.logoUrl}
               alt="Logo"
               style={{
@@ -65,7 +66,7 @@ export default function blogTemplate(data: { backgroundColor: any; logoUrl: stri
               borderRadius: '9999px',
             }}>
               {data.brandLogo && (
-                <img
+                <Image
                   src={data.brandLogo}
                   alt="Brand Logo"
                   style={{

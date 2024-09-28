@@ -1,17 +1,6 @@
 {
-  "extends": "next/core-web-vitals",
-  "overrides": [
-    {
-      "files": ["**/*.ts", "**/*.tsx"],
-      "parserOptions": {
-        "project": "./tsconfig.json"
-      },
-      "linterOptions": {
-        "reportUnusedDisableDirectives": true
-      },
-      "rules": {
-        // ... existing rules ...
-      }
-    }
-  ]
+  "extends": ["next", "next/core-web-vitals"],
+  "rules": {
+    // Add any custom rules here
+  }
 }

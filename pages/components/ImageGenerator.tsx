@@ -1,8 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { HexColorPicker } from 'react-colorful';
 import templates from '../../config/templates';
 
-const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
+interface TemplateField {
+  name: string;
+  type: 'text' | 'color' | 'number' | 'select';
+  label: string;
+  default?: string | number;
+  options?: { value: string; label: string }[];
+}
+
+interface TemplateConfig {
+  name: string;
+  fields: TemplateField[];
+  plan: 'Free' | 'Basic' | 'Pro' | 'Secret';
+}
+
+const getAvailableTemplates = (userPlan: string) => {
+  return Object.entries(templates).reduce((acc, [key, template]) => {
+    if (template.plan === 'Free' || template.plan === userPlan) {
+      acc[key] = template;
+    }
+    return acc;
+  }, {} as Record<string, TemplateConfig>);
+};
+
+const ImageGenerator = ({ fields = {}, setFields, imageUrl, userPlan = 'Free' }) => {
   const [activeColorPicker, setActiveColorPicker] = useState(null);
   const colorPickerRef = useRef(null);
 
@@ -69,6 +93,8 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
     setActiveColorPicker(activeColorPicker === fieldName ? null : fieldName);
   };
 
+  const availableTemplates = getAvailableTemplates(userPlan);
+
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       <div className="w-full lg:w-1/2">
@@ -96,7 +122,7 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
                   onChange={(e) => handleFieldChange('template', e.target.value)}
                   className="w-full px-4 py-2 rounded-lg border border-border bg-white text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition duration-200"
                 >
-                  {Object.entries(templates).map(([key, value]) => (
+                  {Object.entries(availableTemplates).map(([key, value]) => (
                     <option key={key} value={key}>{value.name}</option>
                   ))}
                 </select>
@@ -163,7 +189,7 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl }) => {
             )}
           </div>
           {imageUrl ? (
-            <img src={imageUrl} alt="Generated OpenGraph Image" className="w-full rounded-lg shadow-md" />
+            <Image src={imageUrl} alt="Generated OpenGraph Image" width={1200} height={630} className="w-full rounded-lg shadow-md" />
           ) : (
             <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
               Image preview will appear here
