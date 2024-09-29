@@ -52,6 +52,21 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl, userPlan = 'Free' })
     });
   };
 
+  const getCleanApiUrl = () => {
+    const baseUrl = `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/api/generate`;
+    const params = new URLSearchParams();
+
+    // Only add non-empty fields to the URL
+    Object.entries(fields).forEach(([key, value]) => {
+      if (value && value !== '') {
+        params.append(key, value as string);
+      }
+    });
+
+    const cleanParams = params.toString();
+    return cleanParams ? `${baseUrl}?${cleanParams}` : baseUrl;
+  };
+
   const defaultTemplate = Object.keys(templates)[0] || '';
   const defaultFields = templates[defaultTemplate]?.fields.reduce((acc, field) => {
     acc[field.name] = field.default || '';
@@ -200,11 +215,11 @@ const ImageGenerator = ({ fields = {}, setFields, imageUrl, userPlan = 'Free' })
               <h3 className="text-lg font-semibold mb-2 text-foreground">API Link:</h3>
               <div className="relative">
                 <div
-                  onClick={() => copyToClipboard(`${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/api/generate?${imageUrl.split('?')[1]}`)}
+                  onClick={() => copyToClipboard(getCleanApiUrl())}
                   className="bg-muted p-4 rounded-lg overflow-x-auto cursor-pointer hover:bg-muted/80 transition-colors duration-200 group"
                 >
                   <code className="text-sm text-muted-foreground break-all">
-                    {`${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/api/generate?${imageUrl.split('?')[1]}`}
+                    {getCleanApiUrl()}
                   </code>
                   {!copied && (
                     <span className="absolute invisible group-hover:visible bg-foreground text-background text-xs py-1 px-2 rounded shadow-lg -top-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-200">

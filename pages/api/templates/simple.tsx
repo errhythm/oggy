@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
 import Image from 'next/image';
@@ -23,16 +24,25 @@ export default function simpleTemplate(data: { backgroundColor: any; logoUrl: st
       >
         <div tw="flex w-full h-full items-center justify-center">
           <div tw="flex flex-col items-center justify-center max-w-4xl text-center px-8">
-            {data.logoUrl && (
-              <Image
-                src={data.logoUrl}
-                alt="Logo"
-                width={96}
-                height={96}
-                tw="mb-8"
-                style={{ objectFit: 'contain' }}
-              />
-            )}
+              {data.logoUrl ? (
+                <img
+                  src={data.logoUrl.toString()}
+                  alt="Logo"
+                  width={96}
+                  height={96}
+                  tw="mb-8"
+                  style={{ objectFit: 'contain' }}
+                />
+              ) : (
+                <img
+                  src={`${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/logo.svg`}
+                  alt="Logo"
+                  width={200}
+                  height={200}
+                  tw="mb-8"
+                  style={{ objectFit: 'contain' }}
+                />
+              )}
             <h1
               style={{
                 fontSize: '48px',

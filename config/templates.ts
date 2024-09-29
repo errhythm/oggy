@@ -35,24 +35,13 @@ interface TemplateField {
       ],
       plan: 'Free',
     },
-    blog: {
-      name: 'Blog',
-      fields: [
-        { name: 'author', type: 'text', label: 'Author' },
-        { name: 'date', type: 'text', label: 'Date' },
-        { name: 'title', type: 'text', label: 'Title' },
-        { name: 'subtitle', type: 'text', label: 'Subtitle' },
-        { name: 'imageUrl', type: 'text', label: 'Image URL' },
-      ],
-      plan: 'Free',
-    },
     wonder: {
       name: 'Wonder',
       fields: [
         { name: 'title', type: 'text', label: 'Title' },
         { name: 'subtitle', type: 'text', label: 'Subtitle' },
-        { name: 'backgroundImage', type: 'text', label: 'Background Image URL' },
-        { name: 'authorName', type: 'text', label: 'Author Name' },
+        { name: 'logoUrl', type: 'text', label: 'Logo URL' },
+        { name: 'footer', type: 'text', label: 'Footer' },
       ],
       plan: 'Free',
     },

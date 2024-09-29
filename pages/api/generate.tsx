@@ -18,7 +18,12 @@ export default async function handler(req: NextRequest) {
 
     const templateConfig = templates[template];
     const templateData = templateConfig.fields.reduce((acc, field) => {
-      acc[field.name] = searchParams.get(field.name) || field.default || '';
+      const value = searchParams.get(field.name);
+      if (value && value !== '') {
+        acc[field.name] = value;
+      } else if (field.default) {
+        acc[field.name] = field.default;
+      }
       return acc;
     }, {});
 

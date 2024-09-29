@@ -1,96 +1,84 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from '@vercel/og'
+import Image from 'next/image';
 import { NextRequest } from 'next/server'
 
 export const config = {
   runtime: 'edge',
 }
 
-export default function Wonder({ title, author, backgroundImage }: { title: string, author: string, backgroundImage: string }) {
-  const backgroundStyle = backgroundImage
-    ? {
-        backgroundImage: `url('${backgroundImage}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
-    : {
-        backgroundColor: 'rgb(200, 200, 200)', // Solid gray
-      };
-
+export default function Wonder(data) {
   return new ImageResponse(
     (
       <div
         style={{
+          backgroundColor: '#0D0F14',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          ...backgroundStyle,
+          fontFamily: 'sans-serif',
+          fontSize: '2rem',
+          color: 'white',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Semi-transparent overlay */}
         <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-          }}
-        />
-        {/* Gradient border */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '20px',
-            left: '20px',
-            right: '20px',
-            bottom: '20px',
-            background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1)',
-            borderRadius: '20px',
-          }}
-        />
-        {/* Content container */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '30px',
-            left: '30px',
-            right: '30px',
-            bottom: '30px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-          }}
-        >
-          <h1
-            style={{
-              fontSize: '60px',
-              fontWeight: 'bold',
-              color: '#333',
-              textAlign: 'center',
-              marginBottom: '20px',
-            }}
-          >
-            {title}
-          </h1>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '20px',
-              right: '40px',
-              fontSize: '24px',
-              color: '#333',
-            }}
-          >
-            {author}
+                tw="absolute bottom-0 left-0 right-0 top-0 w-full flex"
+                style={{ backgroundImage: `linear-gradient(to top left, #0D0F14 20%, transparent 50%, rgba(50, 69, 255, 0.3) 80%, rgba(184, 69, 237, 0.3) 100%)` }}
+            >
+            </div>
+
+
+        {data.logoUrl ? (
+          <img
+            src={data.logoUrl}
+            alt="Logo"
+            width={96}
+            height={96}
+            tw="absolute top-[10px] left-1/2 transform -translate-x-1/2"
+            style={{ objectFit: 'contain' }}
+          />
+        ) : (
+          <img
+            src={`${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/logo-white.svg`}
+            alt="Logo"
+            width={200}
+            height={200}
+            tw="absolute top-[10px] transform -translate-x-1/2"
+            style={{ objectFit: 'contain' }}
+          />
+        )}
+
+          <div style={{
+            fontSize: '4rem',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            whiteSpace: 'pre-wrap',
+            lineHeight: '1.2',
+          }}>
+            {data.title ? data.title : 'Create stunning OG images'}
           </div>
-        </div>
+          <div style={{
+            marginTop: '24px',
+            fontSize: '2rem',
+            color: '#D1D5DB',
+            textAlign: 'center',
+            whiteSpace: 'pre-wrap',
+          }}>
+            {data.subtitle ? data.subtitle : 'Powered by AI, designed for you'}
+          </div>
+
+        <p style={{
+          position: 'absolute',
+          bottom: '0',
+          fontSize: '26px',
+        }}>
+          {data.footer || 'oggy.rhystart.com'}
+        </p>
       </div>
     ),
     {
