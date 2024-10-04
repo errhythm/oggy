@@ -66,9 +66,9 @@ export default async function handler(req: NextRequest) {
     (
       <div
       style={{
+        display: 'flex',
         height: '100%',
         width: '100%',
-        display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -90,7 +90,7 @@ export default async function handler(req: NextRequest) {
         <div tw="flex w-full items-center justify-center flex-grow">
           <div tw="flex flex-col items-center justify-center max-w-xl text-center px-8">
             <div tw="flex flex-wrap justify-center gap-3 mt-4">
-              <div tw="px-4 py-1 bg-opacity-80 text-white text-xs font-medium rounded" style={{ backgroundColor: tagColor }}>#{tag}</div>
+              <div tw="flex px-4 py-1 bg-opacity-80 text-white text-xs font-medium rounded" style={{ backgroundColor: tagColor }}>#{tag}</div>
             </div>
             <h1
               style={{
