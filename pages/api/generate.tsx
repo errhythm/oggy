@@ -9,7 +9,7 @@ export const config = {
 
 export default async function handler(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = req.nextUrl;
     const template = searchParams.get('template') || 'simple';
 
     if (!templateRegistry[template]) {
