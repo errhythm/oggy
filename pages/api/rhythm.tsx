@@ -47,14 +47,13 @@ export default async function handler(req: NextRequest) {
     return new Response('Stop being naughty.', { status: 401 })
   }
 
-  // create a function named random images which will generate different background
   const randomImages = () => {
     const images = [
-      { url: `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/backgrounds/1.jpg`, color: '#231942' },
-      { url: `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/backgrounds/2.jpg`, color: '#AE86F7' },
-      { url: `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/backgrounds/3.jpg`, color: '#2773A5' },
-      { url: `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/backgrounds/4.jpg`, color: '#59BA8A' },
-      { url: `${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || 'http://localhost:3000'}/backgrounds/5.jpg`, color: '#DA4167' },
+      { url: `https://oggy.rhystart.com/backgrounds/1.jpg`, color: '#231942' },
+      { url: `https://oggy.rhystart.com/backgrounds/2.jpg`, color: '#AE86F7' },
+      { url: `https://oggy.rhystart.com/backgrounds/3.jpg`, color: '#2773A5' },
+      { url: `https://oggy.rhystart.com/backgrounds/4.jpg`, color: '#59BA8A' },
+      { url: `https://oggy.rhystart.com/backgrounds/5.jpg`, color: '#DA4167' },
     ]
     const selectedImage = images[Math.floor(Math.random() * images.length)]
     return { url: selectedImage.url, tagColor: selectedImage.color }
