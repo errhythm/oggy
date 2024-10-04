@@ -118,7 +118,7 @@ export default async function handler(req: NextRequest) {
             padding: '0 40px',
           }}
         >
-          <p>Ehsanur Rahman</p>
+          <p>Ehsanur Rahman Rhythm</p>
           <p>{new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>
       </div>
