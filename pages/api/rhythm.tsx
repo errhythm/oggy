@@ -93,7 +93,7 @@ export default async function handler(req: NextRequest) {
             </div>
             <h1
               style={{
-                fontSize: '48px',
+                fontSize: '58px',
                 fontWeight: 'bold',
                 color: '#015b69',
                 lineHeight: '1.2',
